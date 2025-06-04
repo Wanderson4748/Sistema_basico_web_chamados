@@ -20,7 +20,8 @@ def init_db():
     conn.commit() # salva as alterações feitas na conexão do BD
     conn.close() # Fecha a conexão com o Banco de Dados
     
-@app.route('/') # Define a rota principal da aplicação (/)
+# Rota principal: lista todos os chamados
+@app.route('/')
 def index(): # Função index para ser chamada na rota (/)
     conn = sqlite3.connect('chamados.db') # Faz a conexão com o BD chamados
     cursor = conn.cursor() # Permite executar comandos sql
@@ -29,6 +30,7 @@ def index(): # Função index para ser chamada na rota (/)
     conn.close() # Fecha a conexão com o BD chamados
     return render_template('index.html', chamados=chamados) # Carrega o HTML e envia os dados para mostrar o navegador
 
+# Rota para criação de um novo chamado
 @app.route('/criar', methods=['GET', 'POST'])
 def criar():
     if request.method == 'POST':
@@ -41,3 +43,13 @@ def criar():
         conn.close()
         return redirect('/')
     return render_template('criar.html')
+
+# Rota para alterar o status de um chamado
+@app.route('/alterar_status/<int:id>/<status>')
+def alterar_status(id, status):
+    conn = sqlite3.connect('chamados.db')
+    cursor = conn.cursor()
+    cursor.execute("UPDATE registros_chamados SET status = ? WHERE id = ?", (status, id))
+    conn.commit()
+    conn.close()
+    return redirect('/')
