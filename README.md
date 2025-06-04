@@ -68,5 +68,14 @@ cursor = execute("SELECT * FROM registros_chamados")
 chamados = cursor.fetchall()
 **. Coleta o que foi feito na consulta sql .**
 
+return render_template('index.html', chamados=chamados)
+**. Carrega o HTML e envia os dados para mostrar o navegador .**
+
+cursor.execute("UPDATE registros_chamados SET status = ? WHERE id = ?", (status, id))
+
+**. Executa um comando de atualização na tabela registros_chamados .**
+
+
+
 
 
